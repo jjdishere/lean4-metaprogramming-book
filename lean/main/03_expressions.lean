@@ -324,3 +324,38 @@ allows us to more conveniently construct and destruct larger expressions.
 9. Create expression `fun (p : Prop) => (λ hP : p => hP)`.
 10. [**Universe levels**] Create expression `Type 6`.
 -/
+
+section solution
+-- `1 + 2`.
+def e1 : Expr := .app (.app (.const `Nat.add []) ((.app (.const `Nat.succ []) (.const `Nat.zero [])))) (.app (.const `Nat.succ []) (.app (.const `Nat.succ []) $ .const `Nat.zero []))
+
+elab "t1" : term => return e1
+#check t1
+#eval t1
+
+-- `1 + 2`.
+def e2 : Expr := mkAppN (.const `Nat.add []) #[natExpr 1, natExpr 2]
+
+elab "t2" : term => return e2
+#check t2
+#eval t2
+
+-- `fun x => 1 + x`.
+def e3 : Expr := .lam `x nat (mkAppN (.const `Nat.add []) #[natExpr 1 , .bvar 0]) BinderInfo.default
+
+elab "t3" : term => return e3
+#check t3
+
+-- `fun a, fun b, fun c, (b * a) + c`.
+def e4 : Expr := .lam `a nat (.lam `b nat (.lam `c nat (mkAppN (.const `Nat.add []) #[(mkAppN (.const `Nat.mul []) #[.bvar 1, .bvar 2]), .bvar 0]) BinderInfo.default) BinderInfo.default) BinderInfo.default
+
+elab "t4" : term => return e4
+#check t4
+
+-- `fun x y => x + y`.
+-- `fun x, String.append "hello, " x`.
+-- `∀ x : Prop, x ∧ x`.
+-- `Nat → String`.
+-- `fun (p : Prop) => (λ hP : p => hP)`.
+-- `Type 6`.
+end solution
