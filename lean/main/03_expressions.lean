@@ -353,9 +353,38 @@ elab "t4" : term => return e4
 #check t4
 
 -- `fun x y => x + y`.
+def e5 : Expr := .lam `x nat (.lam `y nat (mkAppN (.const `Nat.add []) #[.bvar 1, .bvar 0]) BinderInfo.default) BinderInfo.default
+
+elab "t5" : term => return e5
+#check t5
+
 -- `fun x, String.append "hello, " x`.
+def e6 : Expr := .lam `x (.const `String []) (mkAppN (.const `String.append []) #[.lit $ .strVal "hello, ", .bvar 0]) BinderInfo.default
+
+elab "t6" : term => return e6
+#check t6
+
 -- `∀ x : Prop, x ∧ x`.
+def e7 : Expr := .forallE `x (.sort Level.zero) (mkApp2 (.const `And []) (.bvar 0) (.bvar 0)) BinderInfo.default
+
+elab "t7" : term => return e7
+#check t7
+
 -- `Nat → String`.
+def e8 : Expr := .forallE `_ (.const `Nat []) (.const `String []) BinderInfo.default
+
+elab "t8" : term => return e8
+#check t8
+
 -- `fun (p : Prop) => (λ hP : p => hP)`.
+def e9 : Expr := .lam `p (.sort Level.zero) (.lam `hP (.bvar 0) (.bvar 0) BinderInfo.default) BinderInfo.default
+
+elab "t9" : term => return e9
+#check t9
+
 -- `Type 6`.
+def e10 : Expr := .sort (Level.ofNat 7)
+
+elab "t10" : term => return e10
+#check t10
 end solution
